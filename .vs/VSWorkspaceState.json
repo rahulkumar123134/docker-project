@@ -1,7 +1,8 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\DockerProject"
   ],
-  "SelectedNode": "\\C:\\Users\\rkumar1\\Source\\Repos\\docker-project-assessment",
+  "SelectedNode": "\\DockerProject\\Program.cs",
   "PreviewInSolutionExplorer": false
 }
