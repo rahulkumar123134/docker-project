@@ -14,17 +14,21 @@ steps:
       - push
       - "$_GCR_HOSTNAME/$PROJECT_ID/$_SERVICE_NAME:$COMMIT_SHA"
     id: Push
-  - name: "gcr.io/google.com/cloudsdktool/cloud-sdk:slim"
-    args:
-      - run
-      - deploy
-      - $_SERVICE_NAME
-      - "--image"
-      - "$_GCR_HOSTNAME/$PROJECT_ID/$_SERVICE_NAME:$COMMIT_SHA"
-      - "--region"
-      - $_DEPLOY_REGION
+  - id: "Deploy the app"
+    name: gcr.io/google.com/cloudsdktool/cloud-sdk
     entrypoint: gcloud
-    id: Deploy
+    args:
+      - "run"
+      - "deploy"
+      - "$REPO_NAME-$BRANCH_NAME"
+      - "--image"
+      - "gcr.io/$PROJECT_ID/$REPO_NAME/api-built:$BRANCH_NAME"
+      - "--region"
+      - "us-central1"
+      - "--platform"
+      - "managed"
+      - "--port"
+      - "80"
 timeout: 1200s
 images:
   - "$_GCR_HOSTNAME/$PROJECT_ID/$_SERVICE_NAME:$COMMIT_SHA"
