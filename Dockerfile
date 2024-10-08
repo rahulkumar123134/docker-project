@@ -12,6 +12,6 @@ WORKDIR /app
 
 COPY --from=builder /app/publish .
 
-EXPOSE 5000
+EXPOSE 80
 
-CMD ["dotnet", "DockerProject.dll", "--urls", "http://0.0.0.0:5000"]
+CMD ["dotnet", "DockerProject.dll", "--urls", "http://0.0.0.0"]

@@ -9,11 +9,20 @@ steps:
       - "-f"
       - Dockerfile
     id: Build
+
+  - id: "Commit the new image"
+    name: gcr.io/cloud-builders/docker
+    args:
+      - "tag"
+      - "$_GCR_HOSTNAME/$PROJECT_ID/$_SERVICE_NAME:$COMMIT_SHA"
+      - "$_GCR_HOSTNAME/$PROJECT_ID/$_SERVICE_NAME:$BRANCH_NAME"
+
   - name: gcr.io/cloud-builders/docker
     args:
       - push
-      - "$_GCR_HOSTNAME/$PROJECT_ID/$_SERVICE_NAME:$COMMIT_SHA"
+      - "$_GCR_HOSTNAME/$PROJECT_ID/$_SERVICE_NAME:$BRANCH_NAME"
     id: Push
+
   - id: "Deploy the app"
     name: gcr.io/google.com/cloudsdktool/cloud-sdk
     entrypoint: gcloud
@@ -22,7 +31,7 @@ steps:
       - "deploy"
       - "$REPO_NAME-$BRANCH_NAME"
       - "--image"
-      - "gcr.io/$PROJECT_ID/$REPO_NAME/api-built:$BRANCH_NAME"
+      - "$_GCR_HOSTNAME/$PROJECT_ID/$_SERVICE_NAME:$BRANCH_NAME"
       - "--region"
       - "us-central1"
       - "--platform"
@@ -30,5 +39,5 @@ steps:
       - "--port"
       - "80"
 timeout: 1200s
-images:
-  - "$_GCR_HOSTNAME/$PROJECT_ID/$_SERVICE_NAME:$COMMIT_SHA"
+# images:
+#   - "$_GCR_HOSTNAME/$PROJECT_ID/$_SERVICE_NAME:$COMMIT_SHA"
